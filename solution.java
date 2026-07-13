@@ -1,25 +1,48 @@
 class Solution {
-    public int numIslands(char[][] grid) {
-        int cnt=0;
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[0].length;j++){
-                if(grid[i][j]=='1'){
-                    cnt++;
-                    dfs(grid,i,j);
-                }
-            }
+    public boolean helper(int[]state,   ArrayList<Integer>[]adj,int i,ArrayList<Integer>list){
+        if(state[i]==1)
+         return false;
+        if(state[i]==2){
+           
+         return true;}
+        state[i]=1;
+        for(int n:adj[i]){
+            if(!helper(state,adj,n,list))
+             return false;
         }
-        return cnt;
-    }
-    public void dfs (char[][]grid,int i,int j){
-        if(i<0 || j<0 || i>=grid.length || j>=grid[0].length)
-         return ;
-        if(grid[i][j]=='0')
-         return;
-        grid[i][j]='0';
-        dfs(grid,i+1,j);
-        dfs(grid,i-1,j);
-        dfs(grid,i,j-1);
-        dfs(grid,i,j+1);
+        state[i]=2;
+         list.add(i);
+        return true;
+     }
+    public int[] findOrder(int n, int[][] pre) {
+      ArrayList<Integer>[]adj=new ArrayList[n];
+       
+        for(int i=0;i<n;i++)
+            adj[i]=new ArrayList<>();
+        for(int[] ds:pre){
+            int u=ds[0];
+            int v=ds[1];
+            adj[v].add(u);
+        }
+      
+       ArrayList<Integer>list=new ArrayList<>();
+       int[] state=new int[n];
+       int[] ans=new int[n];
+        for(int i=0;i<n;i++){
+           
+           if(  helper(state,adj,i,list)==false)
+            return new int[0];
+      
+        
+
+        }
+        Collections.reverse(list);
+
+        for (int i = 0; i < list.size(); i++) {
+    ans[i] = list.get(i);
+}
+return ans;
+
+        
     }
 }

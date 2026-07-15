@@ -1,29 +1,34 @@
-class ProductOfNumbers {
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        int[] color = new int[n]; 
 
-    ArrayList<Integer> prefix;
-
-    public ProductOfNumbers() {
-        prefix = new ArrayList<>();
-        prefix.add(1);
-    }
-
-    public void add(int num) {
-        if (num == 0) {
-            prefix.clear();
-            prefix.add(1);
-        } else {
-            int last = prefix.get(prefix.size() - 1);
-            prefix.add(last * num);
+        for (int i = 0; i < n; i++) {
+            if (color[i] == 0) {
+                if (!dfs(graph, color, i, 1)) {
+                    return false;
+                }
+            }
         }
+
+        return true;
     }
 
-    public int getProduct(int k) {
-        int n = prefix.size();
+    private boolean dfs(int[][] graph, int[] color, int node, int c) {
+        color[node] = c;
 
-        
-        if (k >= n)
-            return 0;
+        for (int neighbor : graph[node]) {
+            if (color[neighbor] == c) {
+                return false;
+            }
 
-        return prefix.get(n - 1) / prefix.get(n - 1 - k);
+            if (color[neighbor] == 0) {
+                if (!dfs(graph, color, neighbor, -c)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

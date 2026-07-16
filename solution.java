@@ -1,34 +1,86 @@
 class Solution {
-    public boolean isBipartite(int[][] graph) {
-        int n = graph.length;
-        int[] color = new int[n]; 
+    public int[] nextsmaller(int arr[],int[] nse){
+        Stack<Integer>st=new Stack<>();
+        int n=arr.length;
+        for(int i=n-1;i>=0;i--){
+            while(!st.empty() && arr[st.peek()]>=arr[i])
+              st.pop();
+            nse[i]=st.empty()?n:st.peek();
+            st.push(i);
 
-        for (int i = 0; i < n; i++) {
-            if (color[i] == 0) {
-                if (!dfs(graph, color, i, 1)) {
-                    return false;
-                }
-            }
+        }
+        return nse;}
+        public int[] prevsmaller(int arr[],int[] pse){
+        Stack<Integer>st=new Stack<>();
+        int n=arr.length;
+        for(int i=0;i<n;i++){
+            while(!st.empty() && arr[st.peek()]>arr[i])
+              st.pop();
+            pse[i]=st.empty()?-1:st.peek();
+            st.push(i);
+
+        }
+        return pse;}
+      public long sumMins(int[] arr) {
+        int n=arr.length;
+        long total=0;
+     
+
+        int[] nse=new int[n];
+        int[] pse=new int[n];
+        nextsmaller(arr,nse);
+        prevsmaller(arr,pse);
+        for(int i=0;i<n;i++){
+    int l=i-pse[i];
+    int r=nse[i]-i;
+    long freq = 1L * l * r;
+            total += freq * arr[i];
         }
 
-        return true;
+        return total;
     }
-
-    private boolean dfs(int[][] graph, int[] color, int node, int c) {
-        color[node] = c;
-
-        for (int neighbor : graph[node]) {
-            if (color[neighbor] == c) {
-                return false;
-            }
-
-            if (color[neighbor] == 0) {
-                if (!dfs(graph, color, neighbor, -c)) {
-                    return false;
-                }
-            }
+    public int[] nextgreater(int[]arr,int[] nge){
+        Stack<Integer>st=new Stack<>();
+        int n=arr.length;
+        for(int i=n-1;i>=0;i--){
+            while(!st.empty() && arr[st.peek()]<=arr[i])
+             st.pop();
+            nge[i]=st.empty()?n:st.peek();
+            st.push(i);
         }
+        return nge;}
+    public int[] prevgreater(int[] arr,int[] pge){
+        Stack<Integer>st=new Stack<>();
+        int n=arr.length;
+        for(int i=0;i<n;i++){
+            while(!st.empty() && arr[st.peek()]<arr[i])
+              st.pop();
+            pge[i]=st.empty()?-1:st.peek();
+            st.push(i);
+        }
+        return pge;
+    }
+    
+    public long sumMaxs(int[] arr){
+        int n=arr.length;
+        int[] nge=new int[n];
+        int[] pge=new int[n];
+        nextgreater(arr,nge);
+        prevgreater(arr,pge);
+        long total=0;
+       
+        for(int i=0;i<n;i++){
+            int l=i-pge[i];
+            int r=nge[i]-i;
+            long freq = 1L * l * r;
+            total+= freq * arr[i];
 
-        return true;
+        }
+        return total;
+    }
+    
+    public long subArrayRanges(int[] arr) {
+        return sumMaxs(arr)-sumMins(arr);
+        
     }
 }

@@ -1,0 +1,59 @@
+class Pair{
+    int d;
+    int r;
+    int c;
+    Pair(int d,int r,int c){
+        this.r=r;
+        this.c=c;
+        this.d=d;
+    }
+}
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+
+        int n=grid.length;
+         if(grid[0][0]==1 || grid[n-1][n-1]==1)
+           return -1;
+        int[][]distance=new int[n][n];
+        for(int row[]:distance){
+        Arrays.fill(row,Integer.MAX_VALUE);}
+       PriorityQueue<Pair> pq =new PriorityQueue<>((a,b)->a.d-b.d);
+       int[][] dis = {
+    {-1,-1},{-1,0},{-1,1},
+    {0,1},
+    {1,1},{1,0},{1,-1},
+    {0,-1}
+};
+        pq.add(new Pair(1,0,0));
+        distance[0][0]=1;
+        int flag=0;
+        while(!pq.isEmpty()){
+            Pair curr=pq.poll();
+            int d=curr.d;
+            int r=curr.r;
+            int c=curr.c;
+            if(d > distance[r][c]) continue;
+            if(r==n-1 && c==n-1)
+                 return d;
+            for(int[]h:dis){
+
+                int row=r+h[0];
+                int col=c+h[1];
+                if(row>=0 && row<n && col>=0 && col<n && grid[row][col]==0){
+
+                    if(d+1<distance[row][col]){
+                     pq.add(new Pair(d+1,row,col));
+                     distance[row][col]=d+1;
+                     }
+
+                }
+
+
+            }
+
+
+        }
+        return distance[n-1][n-1] == Integer.MAX_VALUE ? -1 : distance[n-1][n-1];
+
+    }
+}

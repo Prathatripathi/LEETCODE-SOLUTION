@@ -1,0 +1,53 @@
+lass Pair{
+    int node,distance;
+    Pair(int node,int distance){
+        this.node=node;
+        this.distance=distance;
+    }
+    }
+
+class Tuple{
+    int first,second,third;
+    Tuple(int first,int second,int third){
+         this.first=first;
+         this.second=second;
+         this.third=third;
+        
+    }
+}
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        Queue<Tuple>pq=new LinkedList<>();
+     ArrayList<ArrayList<Pair>>adj=new ArrayList<>();
+     for(int i=0;i<n;i++)
+      adj.add(new ArrayList<>());
+    for(int i=0;i<flights.length;i++)
+     adj.get(flights[i][0]).add(new Pair(flights[i][1],flights[i][2]));
+    
+     pq.add(new Tuple(0,src,0));
+     int[] distance=new int[n];
+     
+     Arrays.fill(distance,Integer.MAX_VALUE);
+     distance[src]=0;
+     while(!pq.isEmpty()){
+        Tuple curr=pq.peek();
+        int stops=curr.first;
+        int node=curr.second;
+        int cost=curr.third;
+        pq.remove();
+        if(stops>k)continue;
+        for(Pair pair:adj.get(node)){
+            int adjnode=pair.node;
+            int toadd=pair.distance;
+            if(toadd+cost<distance[adjnode] && stops<=k){
+                distance[adjnode]=cost+toadd;
+                pq.add(new Tuple(stops+1,adjnode,cost+toadd));
+            }
+        }
+
+     }
+     if(distance[dst]==Integer.MAX_VALUE)return  -1;
+     return distance[dst];
+      
+     }
+    }

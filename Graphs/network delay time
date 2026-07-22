@@ -1,0 +1,46 @@
+class Pair{
+2    int node,t;
+3    Pair(int node,int t){
+4         this.node=node;
+5         this.t=t;
+6
+7    }
+8}
+9class Solution {
+10    public int networkDelayTime(int[][] times, int n, int k) {
+11        ArrayList<ArrayList<Pair>>adj=new ArrayList<>();
+12        for(int i=0;i<=n;i++)
+13         adj.add(new ArrayList<>());
+14        for(int i=0;i<times.length;i++)
+15         adj.get(times[i][0]).add(new Pair(times[i][1],times[i][2]));
+16       PriorityQueue<Pair> pq =new PriorityQueue<>(Comparator.comparingInt(a -> a.t));
+17        pq.add(new Pair(k,0));
+18        int[] distance=new int[n+1];
+19        Arrays.fill(distance,Integer.MAX_VALUE);
+20        distance[k]=0;
+21        while(!pq.isEmpty()){
+22            Pair curr=pq.peek();
+23            int s=curr.node;
+24           int t=curr.t;
+25           pq.poll();
+26           if (curr.t > distance[curr.node])
+27               continue;
+28           
+29            
+30            for(Pair pair:adj.get(s)){
+31                int newnode=pair.node;
+32                int wgt=pair.t;
+33                if(distance[newnode]>t+wgt){
+34                    distance[newnode]=t+wgt;
+35                    pq.add(new Pair(newnode,t+wgt));
+36                }
+37            }
+38        }
+39        int ans=0;
+40        for(int i=1;i<=n;i++){
+41            if(distance[i]==Integer.MAX_VALUE)return -1;
+42            ans=Math.max(ans,distance[i]);
+43        }
+44        return ans;
+45    }
+46}

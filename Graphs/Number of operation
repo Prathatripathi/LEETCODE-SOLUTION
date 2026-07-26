@@ -1,0 +1,33 @@
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+      int edges=connections.length;
+      if(edges<n-1)
+       return -1;
+      ArrayList<ArrayList<Integer>>adj=new ArrayList<>();
+      for(int i=0;i<n;i++)
+        adj.add(new ArrayList<>());
+      for(int i=0;i<edges;i++){
+        adj.get(connections[i][0]).add(connections[i][1]);
+        adj.get(connections[i][1]).add(connections[i][0]);
+
+      }
+      int[] vis=new int[n];
+      Arrays.fill(vis,0);
+      int component=0;
+      for(int i=0;i<n;i++){
+        if(vis[i]==0){
+          component++;
+          dfs(i,adj,vis);}
+       
+        }
+      return component-1;
+    }
+    public void dfs(int i, ArrayList<ArrayList<Integer>>adj,int[] vis){
+        vis[i]=1;
+        for(int nei:adj.get(i)){
+            if(vis[nei]==0)
+             dfs(nei,adj,vis);
+        }
+
+    }
+}

@@ -1,0 +1,46 @@
+class Solution {
+    public List<List<String>> accountsMerge(List<List<String>> accounts) { 
+    List<List<String>>ans=new ArrayList<>();
+    Map<String,List<String>>graph=new HashMap<>();
+    Map<String,String>email=new HashMap<>();
+    for(List<String>ls:accounts){
+        String name=ls.get(0);
+        String firstemail=ls.get(1);
+        graph.putIfAbsent(firstemail,new ArrayList<String>());
+        email.putIfAbsent(firstemail,name);
+        for(int i=2;i<ls.size();i++){
+              String mail=ls.get(i);
+        graph.putIfAbsent(mail,new ArrayList<String>());
+        email.putIfAbsent(mail,name);
+               
+                 graph.get(firstemail).add(mail);
+                 graph.get(mail).add(firstemail);
+
+        }
+    }
+    Set<String>st=new HashSet<>();
+   
+    for(String emaill:graph.keySet()){
+        if(st.contains(emaill))
+          continue;
+        List<String>component=new ArrayList<>();
+        dfs(emaill,graph,st,component);
+        Collections.sort(component);
+        component.add(0, email.get(emaill));
+        ans.add(component);
+    }
+    return ans;
+    }
+    
+
+        
+    
+    public void dfs(String email, Map<String,List<String>>graph,Set<String>st, List<String>component){
+        st.add(email);
+        component.add(email);
+        for(String next:graph.get(email)){
+            if(!st.contains(next))
+              dfs(next,graph,st,component);
+        }
+    }
+}

@@ -1,0 +1,24 @@
+lass Solution {
+    List<List<Integer>> ans = new LinkedList<>();
+
+    void dfs(TreeNode node, List<Integer> path, int ts) {
+        if (node == null)
+            return;
+
+        path.add(node.val);
+
+        if (node.left == null && node.right == null && ts == node.val)
+            ans.add(new LinkedList<>(path));
+
+        dfs(node.left, path, ts - node.val);
+        dfs(node.right, path, ts - node.val);
+
+        path.remove(path.size() - 1);
+    }
+
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<Integer> path = new LinkedList<>();
+        dfs(root, path, targetSum);
+        return ans;
+    }
+}

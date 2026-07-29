@@ -1,0 +1,21 @@
+class Solution {
+17    Map<Long,Integer>map=new HashMap<>();
+18    int dfs(TreeNode node,long cs,int ts){
+19        if(node==null)return 0;
+20        cs+=node.val;
+21        int cnt=map.getOrDefault((cs-ts),0);
+22        map.put(cs,map.getOrDefault(cs,0)+1);
+23        cnt+=dfs(node.left,cs,ts);
+24        cnt+=dfs(node.right,cs,ts);
+25        map.put(cs,map.get(cs)-1);
+26        return cnt;
+27    }
+28    public int pathSum(TreeNode root, int targetSum) {
+29        map.put(0l,1);
+30        return dfs(root,0l,targetSum);
+31        
+32    }
+33}
+
+
+ 

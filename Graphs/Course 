@@ -1,0 +1,40 @@
+class Solution {
+    public boolean helper(int[]state,   ArrayList<Integer>[]adj,int i){
+        if(state[i]==1)
+         return false;
+        if(state[i]==2)
+         return true;
+        state[i]=1;
+        for(int n:adj[i]){
+            if(!helper(state,adj,n))
+             return false;
+        }
+        state[i]=2;
+        return true;
+     }
+    public boolean canFinish(int numCourses, int[][] pre) {
+        ArrayList<Integer>[]adj=new ArrayList[numCourses];
+        if(pre.length<=1)
+         return true;
+        for(int i=0;i<numCourses;i++)
+            adj[i]=new ArrayList<>();
+        for(int[] ds:pre){
+            int u=ds[0];
+            int v=ds[1];
+            adj[v].add(u);
+        }
+        int[] state=new int[numCourses];
+        for(int i=0;i<numCourses;i++){
+           
+           if(  helper(state,adj,i)==false)
+            return false;
+
+        }
+        return true;
+
+
+
+        
+        
+    }
+}
